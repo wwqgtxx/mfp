@@ -77,7 +77,7 @@ func FindPair() {
 			flags := false
 			for _, kw := range keywordsList {
 				if result, ok := mapper[kw]; ok {
-					fmt.Printf("%s:%s", kw, result)
+					fmt.Printf("%s:%s\n", kw, result)
 					flags = true
 				}
 			}
@@ -86,7 +86,7 @@ func FindPair() {
 				fmt.Println(keywordsList)
 				for _, kw := range keywordsList {
 					if result, ok := mapper[kw]; ok {
-						fmt.Printf("%s:%s", kw, result)
+						fmt.Printf("%s:%s\n", kw, result)
 						flags = true
 					}
 				}
