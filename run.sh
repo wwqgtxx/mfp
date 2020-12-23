@@ -23,7 +23,7 @@ mkdir -p db_data
 #将分词后数据上传到HDFS
 hadoop fs -mkdir /mfp
 hadoop fs -mkdir /mfp/data
-hadoop fs -put ./format_data/*.txt /mfp/data
+hadoop fs -put ./db_data/*.txt /mfp/data
 hadoop fs -ls /mfp/data
 
 #运行 MR1: 并行计数
@@ -32,6 +32,7 @@ yarn jar `find $HADOOP_HOME/share/hadoop/tools/lib/ -name hadoop-streaming*.jar`
 #将MR1结果取回
 rm -rf res1
 rm -rf res1.txt
+rm -rf gList.json
 mkdir -p res1
 hadoop fs -get /mfp/res1/part-* ./res1/
 

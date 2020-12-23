@@ -4,9 +4,9 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"github.com/wwqgtxx/mfp/common"
 	"io"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -26,7 +26,12 @@ func SortKV() {
 	}
 	defer file.Close()
 	reader := bufio.NewReader(file)
-	lineMap := make(map[string]int)
+
+	type kv struct {
+		Key   string
+		Value int
+	}
+	lineList := make([]kv, 0)
 
 	for {
 		readLine, err := reader.ReadString('\n')
@@ -45,24 +50,69 @@ func SortKV() {
 			if err != nil {
 				continue
 			}
-			lineMap[pattern] = supp
+			lineList = append(lineList, kv{pattern, supp})
 		}
 	}
-	itemsCount := len(lineMap)
+	itemsCount := len(lineList)
 	fmt.Printf("项目总数：%d\n", itemsCount)
 
-	resultMap := make(map[string]string)
-	for i, k := range common.RankMapStringInt(lineMap) {
-		//v := lineMap[k]
-		resultMap[k] = strconv.Itoa(i/I + 1)
-	}
+	sort.Slice(lineList, func(i, j int) bool {
+		return lineList[i].Value > lineList[j].Value
+	})
 	gListFile, err := os.Create(os.Args[3])
 	if err != nil {
 		panic(err)
 	}
 	defer gListFile.Close()
-	err = json.NewEncoder(gListFile).Encode(resultMap)
+
+	writer := bufio.NewWriter(gListFile)
+	_, err = writer.WriteString("{")
 	if err != nil {
 		panic(err)
 	}
+	for i, kv := range lineList {
+		if i != 0 {
+			_, err = writer.WriteString(",\n  ")
+			if err != nil {
+				panic(err)
+			}
+		}
+		b, err := json.Marshal(kv.Key)
+		if err != nil {
+			panic(err)
+		}
+		_, err = writer.Write(b)
+		if err != nil {
+			panic(err)
+		}
+		_, err = writer.WriteString(":")
+		if err != nil {
+			panic(err)
+		}
+		b, err = json.Marshal(strconv.Itoa(i/I + 1))
+		if err != nil {
+			panic(err)
+		}
+		_, err = writer.Write(b)
+		if err != nil {
+			panic(err)
+		}
+	}
+	_, err = writer.WriteString("\n}")
+	if err != nil {
+		panic(err)
+	}
+	err = writer.Flush()
+	if err != nil {
+		panic(err)
+	}
+
+	//resultMap := make(map[string]string)
+	//for i, kv := range lineList {
+	//	resultMap[kv.Key] = strconv.Itoa(i/I + 1)
+	//}
+	//err = json.NewEncoder(gListFile).Encode(resultMap)
+	//if err != nil {
+	//	panic(err)
+	//}
 }
