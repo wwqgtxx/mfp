@@ -39,6 +39,7 @@ func buildMapper(filePath string) map[string]string {
 
 func FindPair() {
 	var seg gse.Segmenter
+	seg.SkipLog = true
 	err := seg.LoadDict("dictionary.txt")
 	if err != nil {
 		panic(err)

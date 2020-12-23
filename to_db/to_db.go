@@ -14,6 +14,7 @@ import (
 
 func ToDB() {
 	var seg gse.Segmenter
+	seg.SkipLog = true
 	err := seg.LoadDict("dictionary.txt")
 	if err != nil {
 		panic(err)
