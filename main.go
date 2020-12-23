@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/wwqgtxx/mfp/combine_part"
+	"github.com/wwqgtxx/mfp/combine_parts"
 	"github.com/wwqgtxx/mfp/find_pair"
 	"github.com/wwqgtxx/mfp/format_file"
 	"github.com/wwqgtxx/mfp/gb2utf8"
@@ -36,8 +36,8 @@ func main() {
 		mr3.Reducer()
 	case "sort_kv":
 		sort_kv.SortKV()
-	case "combine_part":
-		combine_part.CombinePart()
+	case "combine_parts":
+		combine_parts.CombineParts()
 	case "gb2utf8":
 		gb2utf8.GB2UTF8()
 	case "format_file":

@@ -1,4 +1,4 @@
-package combine_part
+package combine_parts
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 )
 
-func CombinePart() {
+func CombineParts() {
 	if len(os.Args) < 4 {
 		fmt.Println("expected file path and target name")
 		os.Exit(1)
@@ -33,7 +33,7 @@ func CombinePart() {
 			if err != nil {
 				panic(err)
 			}
-			fmt.Printf("从【%s】往【%s】复制了%d个字节", fileName, targetFile.Name(), i)
+			fmt.Printf("从【%s】往【%s】复制了%d个字节\n", fileName, targetFile.Name(), i)
 		}()
 	}
 }
