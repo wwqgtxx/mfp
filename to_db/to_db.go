@@ -29,8 +29,6 @@ func ToDB() {
 	}
 	fmt.Println(files)
 
-	uid2keywords := make(map[string][]string)
-
 	re, err := regexp.Compile("[+\\s]")
 	if err != nil {
 		panic(err)
@@ -50,13 +48,15 @@ func ToDB() {
 		}
 		fmt.Println(stat.Name())
 
-		targetFile, err := os.Create(os.Args[3] + "/" + strings.TrimRight(stat.Name(), "_db.txt") + ".txt")
+		targetFile, err := os.Create(os.Args[3] + "/" + strings.TrimSuffix(stat.Name(), ".txt") + "_db.txt")
 		if err != nil {
 			panic(err)
 		}
 		defer targetFile.Close()
 
 		reader := bufio.NewReader(file)
+
+		uid2keywords := make(map[string][]string)
 
 		for {
 			readLine, err := reader.ReadString('\n')
@@ -75,8 +75,8 @@ func ToDB() {
 			}
 			uid := split[1]
 			keywords := split[2]
-			keywords = strings.TrimLeft(keywords, "[")
-			keywords = strings.TrimRight(keywords, "]") //去掉中括号
+			keywords = strings.TrimPrefix(keywords, "[")
+			keywords = strings.TrimSuffix(keywords, "]") //去掉中括号
 
 			//通过加号和空白符分开后，再用 jieba 搜索引擎模式分词
 			keywordsTempArr := make([]string, 0, len(keywords))

@@ -55,7 +55,7 @@ func FormatFile() {
 		}
 		fmt.Println(stat.Name())
 
-		targetFile, err := os.Create(os.Args[3] + "/" + strings.TrimRight(stat.Name(), ".decode.filter.utf8") + ".txt")
+		targetFile, err := os.Create(os.Args[3] + "/" + strings.TrimSuffix(stat.Name(), ".decode.filter.utf8") + ".txt")
 		if err != nil {
 			panic(err)
 		}

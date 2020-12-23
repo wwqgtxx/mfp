@@ -45,6 +45,6 @@ func GB2UTF8() {
 		if err != nil {
 			panic(err)
 		}
-		fmt.Printf("从【%s】往【%s】复制了%d个字节", fileName, targetFile.Name(), i)
+		fmt.Printf("从【%s】往【%s】复制了%d个字节\n", fileName, targetFile.Name(), i)
 	}
 }

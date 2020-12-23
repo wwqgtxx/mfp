@@ -5,8 +5,8 @@ copy /Y dictionary.txt bin\
 set CGO_ENABLED=0
 set GOARCH=amd64
 set GOOS=linux
-go build -o bin/mfp-linux-amd64
+go build -trimpath -o bin/mfp-linux-amd64
 set GOARCH=amd64
 set GOOS=windows
-go build -o bin/mfp-windows-amd64.exe
+go build -trimpath -o bin/mfp-windows-amd64.exe
 pause
