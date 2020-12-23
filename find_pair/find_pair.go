@@ -2,11 +2,17 @@ package find_pair
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
 	"github.com/go-ego/gse"
 	"io"
 	"os"
 	"strings"
+)
+
+var (
+	seg    gse.Segmenter
+	mapper map[string]string
 )
 
 func buildMapper(filePath string) map[string]string {
@@ -37,18 +43,81 @@ func buildMapper(filePath string) map[string]string {
 	return mapper
 }
 
-func FindPair() {
-	var seg gse.Segmenter
+func Init(filePath string) {
 	seg.SkipLog = true
 	err := seg.LoadDict("dictionary.txt")
 	if err != nil {
 		panic(err)
 	}
+	mapper = buildMapper(filePath)
+}
+
+func FindPairFromStringToWriter(word string, out io.Writer) (err error) {
+	if len(word) < 1 {
+		return nil
+	}
+
+	if result, ok := mapper[word]; ok {
+		_, err = fmt.Fprintln(out, result)
+		if err != nil {
+			return err
+		}
+	} else {
+		_, err = fmt.Fprintln(out, "没有找到该关键词，提供一些近似的关键词：")
+		if err != nil {
+			return err
+		}
+		keywordsList := seg.Slice(word, false)
+		_, err = fmt.Fprintln(out, keywordsList)
+		if err != nil {
+			return err
+		}
+		flags := false
+		for _, kw := range keywordsList {
+			if result, ok := mapper[kw]; ok {
+				_, err = fmt.Fprintf(out, "%s:%s\n", kw, result)
+				if err != nil {
+					return err
+				}
+				flags = true
+			}
+		}
+		if !flags {
+			keywordsList := seg.CutSearch(word)
+			_, err = fmt.Fprintln(out, keywordsList)
+			for _, kw := range keywordsList {
+				if result, ok := mapper[kw]; ok {
+					_, err = fmt.Fprintf(out, "%s:%s\n", kw, result)
+					if err != nil {
+						return err
+					}
+					flags = true
+				}
+			}
+		}
+		if !flags {
+			_, err = fmt.Fprintln(out, "无结果")
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func FindPairFromString(word string) (str string, err error) {
+	bufferString := bytes.NewBufferString("")
+	err = FindPairFromStringToWriter(word, bufferString)
+	str = bufferString.String()
+	return
+}
+
+func FindPair() {
 	filePath := "./res.txt"
 	if len(os.Args) > 2 {
 		filePath = os.Args[2]
 	}
-	mapper := buildMapper(filePath)
+	Init(filePath)
 	reader := bufio.NewReader(os.Stdin)
 	for {
 		fmt.Println("请输入想要查找关联模式的关键词：(输入“q”退出")
@@ -65,36 +134,9 @@ func FindPair() {
 		if strings.ToLower(word) == "q" {
 			return
 		}
-		if len(word) < 1 {
-			continue
-		}
-
-		if result, ok := mapper[word]; ok {
-			fmt.Println(result)
-		} else {
-			fmt.Println("没有找到该关键词，提供一些近似的关键词：")
-			keywordsList := seg.Slice(word, false)
-			fmt.Println(keywordsList)
-			flags := false
-			for _, kw := range keywordsList {
-				if result, ok := mapper[kw]; ok {
-					fmt.Printf("%s:%s\n", kw, result)
-					flags = true
-				}
-			}
-			if !flags {
-				keywordsList := seg.CutSearch(word)
-				fmt.Println(keywordsList)
-				for _, kw := range keywordsList {
-					if result, ok := mapper[kw]; ok {
-						fmt.Printf("%s:%s\n", kw, result)
-						flags = true
-					}
-				}
-			}
-			if !flags {
-				fmt.Println("无结果")
-			}
+		err = FindPairFromStringToWriter(word, os.Stdout)
+		if err != nil {
+			panic(err)
 		}
 	}
 }
