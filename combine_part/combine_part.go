@@ -23,15 +23,17 @@ func CombinePart() {
 	}
 	defer targetFile.Close()
 	for _, fileName := range files {
-		file, err := os.Open(fileName)
-		if err != nil {
-			panic(err)
-		}
-		defer file.Close()
-		i, err := io.Copy(targetFile, file)
-		if err != nil {
-			panic(err)
-		}
-		fmt.Printf("从【%s】往【%s】复制了%d个字节", fileName, targetFile.Name(), i)
+		func() {
+			file, err := os.Open(fileName)
+			if err != nil {
+				panic(err)
+			}
+			defer file.Close()
+			i, err := io.Copy(targetFile, file)
+			if err != nil {
+				panic(err)
+			}
+			fmt.Printf("从【%s】往【%s】复制了%d个字节", fileName, targetFile.Name(), i)
+		}()
 	}
 }

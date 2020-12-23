@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func Mapper() {
+func getGList() map[string]string {
 	gList := make(map[string]string)
 	file, err := os.Open("gList.json")
 	if err != nil {
@@ -21,6 +21,11 @@ func Mapper() {
 	if err != nil {
 		panic(err)
 	}
+	return gList
+}
+
+func Mapper() {
+	gList := getGList()
 	usedGid := make([]string, 0)
 	reader := bufio.NewReader(os.Stdin)
 	for {

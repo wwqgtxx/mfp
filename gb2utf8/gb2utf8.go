@@ -22,29 +22,31 @@ func GB2UTF8() {
 
 	decoder := simplifiedchinese.GB18030.NewDecoder()
 	for _, fileName := range files {
-		file, err := os.Open(fileName)
-		if err != nil {
-			panic(err)
-		}
-		defer file.Close()
-		stat, err := file.Stat()
-		if err != nil {
-			panic(err)
-		}
-		fmt.Println(stat.Name())
+		func() {
+			file, err := os.Open(fileName)
+			if err != nil {
+				panic(err)
+			}
+			defer file.Close()
+			stat, err := file.Stat()
+			if err != nil {
+				panic(err)
+			}
+			fmt.Println(stat.Name())
 
-		targetFile, err := os.Create(os.Args[3] + "/" + stat.Name() + ".utf8")
-		if err != nil {
-			panic(err)
-		}
-		defer targetFile.Close()
+			targetFile, err := os.Create(os.Args[3] + "/" + stat.Name() + ".utf8")
+			if err != nil {
+				panic(err)
+			}
+			defer targetFile.Close()
 
-		decodedFile := decoder.Reader(file)
+			decodedFile := decoder.Reader(file)
 
-		i, err := io.Copy(targetFile, decodedFile)
-		if err != nil {
-			panic(err)
-		}
-		fmt.Printf("从【%s】往【%s】复制了%d个字节\n", fileName, targetFile.Name(), i)
+			i, err := io.Copy(targetFile, decodedFile)
+			if err != nil {
+				panic(err)
+			}
+			fmt.Printf("从【%s】往【%s】复制了%d个字节\n", fileName, targetFile.Name(), i)
+		}()
 	}
 }
