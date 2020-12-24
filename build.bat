@@ -10,3 +10,4 @@ set GOARCH=amd64
 set GOOS=windows
 go build -trimpath -o bin/mfp-windows-amd64.exe
 pause
+exit

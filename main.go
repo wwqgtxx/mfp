@@ -2,17 +2,18 @@ package main
 
 import (
 	"fmt"
+	"os"
+
+	"github.com/wwqgtxx/mfp/api_server"
 	"github.com/wwqgtxx/mfp/combine_parts"
 	"github.com/wwqgtxx/mfp/find_pair"
 	"github.com/wwqgtxx/mfp/format_file"
 	"github.com/wwqgtxx/mfp/gb2utf8"
-	"github.com/wwqgtxx/mfp/to_db"
-	"os"
-
 	"github.com/wwqgtxx/mfp/mr1"
 	"github.com/wwqgtxx/mfp/mr2"
 	"github.com/wwqgtxx/mfp/mr3"
 	"github.com/wwqgtxx/mfp/sort_kv"
+	"github.com/wwqgtxx/mfp/to_db"
 )
 
 func main() {
@@ -46,6 +47,8 @@ func main() {
 		to_db.ToDB()
 	case "find_pair":
 		find_pair.FindPair()
+	case "api_server":
+		api_server.ApiServer()
 	default:
 		fmt.Println("expected subcommands")
 		os.Exit(1)

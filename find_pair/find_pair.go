@@ -11,8 +11,9 @@ import (
 )
 
 var (
-	seg    gse.Segmenter
-	mapper map[string]string
+	seg      gse.Segmenter
+	mapper   map[string]string
+	FilePath = "./res.txt"
 )
 
 func buildMapper(filePath string) map[string]string {
@@ -43,13 +44,13 @@ func buildMapper(filePath string) map[string]string {
 	return mapper
 }
 
-func Init(filePath string) {
+func Init() {
 	seg.SkipLog = true
 	err := seg.LoadDict("dictionary.txt")
 	if err != nil {
 		panic(err)
 	}
-	mapper = buildMapper(filePath)
+	mapper = buildMapper(FilePath)
 }
 
 func FindPairFromStringToWriter(word string, out io.Writer) (err error) {
@@ -113,11 +114,10 @@ func FindPairFromString(word string) (str string, err error) {
 }
 
 func FindPair() {
-	filePath := "./res.txt"
 	if len(os.Args) > 2 {
-		filePath = os.Args[2]
+		FilePath = os.Args[2]
 	}
-	Init(filePath)
+	Init()
 	reader := bufio.NewReader(os.Stdin)
 	for {
 		fmt.Println("请输入想要查找关联模式的关键词：(输入“q”退出")

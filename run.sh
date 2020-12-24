@@ -57,3 +57,6 @@ hadoop fs -get /mfp/res3/part-* ./result/
 
 #输入想要查询的关键词，就会返回其频繁二项集
 ./mfp-linux-amd64 find_pair
+
+#开启API服务器
+./mfp-linux-amd64 api_server --listen 0.0.0.0:8000
