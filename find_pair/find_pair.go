@@ -68,7 +68,7 @@ func FindPairFromStringToWriter(word string, out io.Writer) (err error) {
 		if err != nil {
 			return err
 		}
-		keywordsList := seg.Slice(word, false)
+		keywordsList := seg.Cut(word)
 		_, err = fmt.Fprintln(out, keywordsList)
 		if err != nil {
 			return err

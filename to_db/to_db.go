@@ -89,7 +89,7 @@ func ToDB() {
 					}
 				}
 				keywordsTemp := strings.Join(keywordsTempArr, " ")
-				keywordsList := seg.Slice(keywordsTemp, false)
+				keywordsList := seg.Cut(keywordsTemp)
 
 				if uid2keyword, ok := uid2keywords[uid]; !ok {
 					uid2keywords[uid] = keywordsList
