@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/wwqgtxx/mfp/find_pair"
+	"github.com/wwqgtxx/mfp/mfp_web"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -73,8 +74,9 @@ func ApiServer() {
 	find_pair.Init()
 
 	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/", homeHandle)
+
 	router.HandleFunc("/api", apiHandle)
+	router.PathPrefix("/").Handler(http.FileServer(http.FS(mfp_web.Dist)))
 	log.Printf("启动API服务器，监听地址：%s\n", listen)
 	log.Fatal(http.ListenAndServe(listen, router))
 }

@@ -1,4 +1,7 @@
 cd %~dp0
+cd mfp_web
+cmd /c npm run build
+cd ..
 rmdir /S /Q bin
 mkdir bin
 copy /Y dictionary.txt bin\
