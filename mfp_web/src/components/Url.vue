@@ -72,7 +72,6 @@ export default {
               { value: 7547, name: "weibo.com" },
               { value: 7544, name: "cf.qq.com" },
               { value: 7043, name: "www.xixiwg.com" },
-              { value: 6961, name: "www.12306.cn" },
               { value: 4328461, name: "其他网址" },
             ],
             itemStyle: {

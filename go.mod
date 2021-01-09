@@ -1,6 +1,6 @@
 module github.com/wwqgtxx/mfp
 
-go 1.15
+go 1.16
 
 require (
 	github.com/go-ego/gse v0.63.3
